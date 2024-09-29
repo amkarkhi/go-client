@@ -1,4 +1,4 @@
-module github.com/qdrant/go-client
+module github.com/amkarkhi/go-client
 
 go 1.22.2
 

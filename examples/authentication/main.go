@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/qdrant/go-client/qdrant"
+	"github.com/amkarkhi/go-client/qdrant"
 )
 
 func main() {

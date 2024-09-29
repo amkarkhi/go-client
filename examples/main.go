@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/qdrant/go-client/qdrant"
+	"github.com/amkarkhi/go-client/qdrant"
 )
 
 var (
