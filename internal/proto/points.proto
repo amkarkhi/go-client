@@ -529,6 +529,9 @@ message Query {
     OrderBy order_by = 5; // Order the points by a payload field.
     Fusion fusion = 6; // Fuse the results of multiple prefetches.
     Sample sample = 7; // Sample points from the collection.
+    // Field numbers 8, 9, 10 are reserved upstream for formula / nearest_with_mmr / rrf
+    // (not ported in this fork). Keep `relevance_feedback = 11` to match the Qdrant wire format.
+    RelevanceFeedbackInput relevance_feedback = 11; // Search with feedback from some oracle (Qdrant >= 1.17).
   }
 }
 
@@ -1019,4 +1022,36 @@ message PointStruct {
 message GeoPoint {
   double lon = 1;
   double lat = 2;
+}
+
+// -------------------------------------------------------
+// ------------------ Relevance Feedback -----------------
+// -------------------------------------------------------
+// Appended at the end of the file on purpose: new messages
+// get the highest msgTypes[] indices so existing reflection
+// bookkeeping in the generated Go file does not shift.
+// Requires Qdrant server >= 1.17.
+
+message RelevanceFeedbackInput {
+  VectorInput target = 1; // The original query vector
+  repeated FeedbackItem feedback = 2; // Previous results scored by the feedback provider.
+  FeedbackStrategy strategy = 3; // Formula and trained coefficients to use.
+}
+
+message FeedbackItem {
+  VectorInput example = 1; // The id or vector from the original model
+  float score = 2; // Score for this vector as determined by the feedback provider
+}
+
+message FeedbackStrategy {
+  oneof variant {
+    // a * score + sim(confidence^b * c * delta)
+    NaiveFeedbackStrategy naive = 1;
+  }
+}
+
+message NaiveFeedbackStrategy {
+  float a = 1;
+  float b = 2;
+  float c = 3;
 }

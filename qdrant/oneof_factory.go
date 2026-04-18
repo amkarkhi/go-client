@@ -672,6 +672,25 @@ func NewQuerySample(sample Sample) *Query {
 	}
 }
 
+// Creates a *Query instance for a relevance-feedback query from *RelevanceFeedbackInput.
+// Requires Qdrant server >= 1.17.
+func NewQueryRelevanceFeedback(relevanceFeedback *RelevanceFeedbackInput) *Query {
+	return &Query{
+		Variant: &Query_RelevanceFeedback{
+			RelevanceFeedback: relevanceFeedback,
+		},
+	}
+}
+
+// Creates a *FeedbackStrategy instance from an instance of *NaiveFeedbackStrategy.
+func NewFeedbackStrategyNaive(naive *NaiveFeedbackStrategy) *FeedbackStrategy {
+	return &FeedbackStrategy{
+		Variant: &FeedbackStrategy_Naive{
+			Naive: naive,
+		},
+	}
+}
+
 // Creates a *FacetValue instance from a string.
 func NewFacetValue(value string) *FacetValue {
 	return &FacetValue{
